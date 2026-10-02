@@ -1,0 +1,20 @@
+{
+  "name": "apps-thiagotn",
+  "version": "1.0.0",
+  "private": true,
+  "description": "apps.thiagotn.com — vitrine dos side projects, site estático em Astro",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "thumbs": "node scripts/thumbs.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.3.5"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

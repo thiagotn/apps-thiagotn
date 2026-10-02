@@ -1,0 +1,51 @@
+{
+  "$comment": "Fonte de verdade da vitrine. Acrescentar um app aqui é tudo o que a página precisa: os chips de filtro, as contagens e os tints dos cards são derivados daqui em tempo de build. Os textos vêm do handoff de design e são finais.",
+  "apps": [
+    {
+      "slug": "rachao",
+      "name": "rachao.app",
+      "kind": "PWA · Android",
+      "url": "https://rachao.app",
+      "repo": "https://github.com/thiagotn/football-manager",
+      "summary": "Organiza o futebol da galera: grupos, partidas, confirmação de presença por link, sorteio de times e um servidor MCP para conversar com o app via IA.",
+      "stacks": ["SvelteKit", "Tailwind", "FastAPI", "Go", "PostgreSQL", "Playwright", "MCP"],
+      "featured": true
+    },
+    {
+      "slug": "churrasquin",
+      "name": "churrasqu.in",
+      "kind": "Web app",
+      "url": "https://churrasqu.in",
+      "repo": "https://github.com/thiagotn/churrasqu.in",
+      "summary": "Calculadora de churrasco: quem vai, quanto custa e a lista de compras por nível. Convite com QR Code, rateio por Pix e RSVP sem cadastro.",
+      "stacks": ["Next.js", "NestJS", "Prisma", "PostgreSQL", "Tailwind", "TypeScript"]
+    },
+    {
+      "slug": "prumo",
+      "name": "prumo.in",
+      "kind": "SaaS",
+      "url": "https://prumo.in",
+      "repo": "https://github.com/thiagotn/prumo",
+      "summary": "Gestão clínica white-label e multi-tenant: agenda, prontuário, estoque por lote, termos com assinatura em PDF e financeiro.",
+      "stacks": ["Next.js", "React", "Prisma", "PostgreSQL", "Vitest", "Playwright"]
+    },
+    {
+      "slug": "blog",
+      "name": "thiagotn.com",
+      "kind": "Blog",
+      "url": "https://thiagotn.com",
+      "repo": "https://github.com/thiagotn/thiagotn-blog",
+      "summary": "Meu blog pessoal, bilíngue, sobre software, infraestrutura, homelab e o que mais der vontade.",
+      "stacks": ["Hugo", "Nginx", "Docker", "k3s", "Argo CD"]
+    },
+    {
+      "slug": "dratatimayumi",
+      "name": "dratatimayumi.com.br",
+      "kind": "Site institucional",
+      "url": "https://dratatimayumi.com.br",
+      "repo": "https://github.com/thiagotn/dratatimayumi-web",
+      "summary": "Site de estética avançada com serviços, portfólio, FAQ e contato direto pelo WhatsApp.",
+      "stacks": ["HTML", "Tailwind", "JavaScript", "Nginx", "k3s"]
+    }
+  ]
+}

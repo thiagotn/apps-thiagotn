@@ -1,0 +1,80 @@
+---
+import Icon from './Icon.astro';
+import type { App } from '../lib/apps';
+
+interface Props {
+  app: App;
+}
+const { app } = Astro.props;
+---
+
+<!-- Visível apenas sob o filtro "Todos" (regra no CSS do filtro, em index.astro). -->
+<article
+  class="js-featured"
+  style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(24px,4vw,56px);align-items:center;background:var(--color-surface);border-radius:calc(2 * var(--radius-lg));padding:clamp(20px,3vw,36px);box-shadow:var(--shadow-sm);margin-bottom:32px"
+>
+  <div style="display:flex;flex-direction:column;gap:18px;align-items:flex-start">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="tag tag-accent">Em destaque</span>
+      <span class="tag tag-neutral">{app.kind}</span>
+    </div>
+
+    <h2 style="margin:0;font-size:clamp(32px,4vw,48px);line-height:1.08">{app.name}</h2>
+
+    <p
+      style="margin:0;font-size:17px;line-height:1.6;max-width:48ch;color:color-mix(in srgb,var(--color-text) 80%,transparent)"
+    >
+      {app.summary}
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      {
+        app.stacks.map((stack) => (
+          <span class="tag tag-neutral js-tag" data-stack={stack}>
+            {stack}
+          </span>
+        ))
+      }
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:6px">
+      <a
+        class="btn btn-primary"
+        href={app.url}
+        target="_blank"
+        rel="noopener"
+        style="font-size:15px;padding:10px 20px"
+      >
+        Abrir {app.name}
+        <Icon name="arrow-up-right" size={16} />
+      </a>
+      <a
+        class="btn btn-secondary"
+        href={app.repo}
+        target="_blank"
+        rel="noopener"
+        style="font-size:15px;padding:10px 18px"
+      >
+        <Icon name="github" size={16} />
+        Código
+      </a>
+    </div>
+  </div>
+
+  <div
+    style="position:relative;aspect-ratio:4/3;border-radius:calc(1.5 * var(--radius-lg));overflow:hidden;background:var(--color-accent-100)"
+  >
+    <div class="washed" style="position:absolute;inset:0">
+      <!-- A única imagem acima da dobra: sem lazy, e com fetchpriority alta. -->
+      <img
+        src={`/thumbs/${app.slug}-4x3.webp`}
+        alt={`Captura de tela de ${app.name}`}
+        width="1200"
+        height="900"
+        decoding="async"
+        fetchpriority="high"
+        style="width:100%;height:100%;object-fit:cover"
+      />
+    </div>
+  </div>
+</article>

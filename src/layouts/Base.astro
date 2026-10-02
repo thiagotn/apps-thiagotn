@@ -1,0 +1,65 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og.png', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="pt-BR" data-filter="Todos">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="apps.thiagotn" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#f5ead8" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="https://thiagotn.com/index.xml" />
+
+    <!-- Fontes do design system: Caprasimo nos títulos, Figtree no texto.
+         Por <link> e não pelo @import do CSS, que serializaria o download. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/organic.css';
+
+  /* Ajustes que no protótipo viviam no <helmet> da página. Cada um é load-bearing:
+     - overflow-x: clip        → o círculo decorativo fica em right:-160px; sem isto ele
+                                 cria barra de rolagem horizontal;
+     - text-wrap: pretty       → quebra de linha dos parágrafos e títulos;
+     - cor de link accent-700  → mais escura que o --color-accent do design system, para
+                                 o link "Blog" ter contraste sobre o fundo bege. */
+  body {
+    overflow-x: clip;
+    text-wrap: pretty;
+  }
+  a {
+    color: var(--color-accent-700);
+  }
+  a:hover {
+    color: var(--color-accent-800);
+  }
+</style>

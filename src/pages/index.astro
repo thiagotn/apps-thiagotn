@@ -1,0 +1,166 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import StackFilter from '../components/StackFilter.astro';
+import FeaturedApp from '../components/FeaturedApp.astro';
+import AppCard from '../components/AppCard.astro';
+import { ALL, FEATURED, cards, chips, stackCounts } from '../lib/apps';
+
+const chipList = chips();
+const cardList = cards();
+const stacks = [...stackCounts().keys()];
+
+// O filtro é CSS, não JavaScript: para cada stack, três regras que escondem o que não
+// casa, pintam o chip ativo e promovem a tag correspondente dentro do card. O script
+// abaixo só troca `data-filter` no <html> — o estado inicial já sai pronto do servidor,
+// sem piscar.
+const filterCss = [
+  // Sob "Todos", o card do destaque sai do grid (ele aparece no bloco de cima).
+  `html[data-filter="${ALL}"] .js-app[data-featured] { display: none }`,
+  // Com qualquer filtro aplicado, o bloco de destaque some e o app volta a ser um card.
+  `html:not([data-filter="${ALL}"]) .js-featured { display: none }`,
+  `html[data-filter="${ALL}"] .js-chip[data-stack="${ALL}"] { background: var(--color-accent-100); color: var(--color-accent-800); border-color: transparent }`,
+  '.js-empty { display: none }',
+  'html[data-empty] .js-empty { display: block }',
+  ...stacks.flatMap((stack) => [
+    `html[data-filter="${stack}"] .js-app:not([data-stacks*="|${stack}|"]) { display: none }`,
+    `html[data-filter="${stack}"] .js-chip[data-stack="${stack}"] { background: var(--color-accent-100); color: var(--color-accent-800); border-color: transparent }`,
+    `html[data-filter="${stack}"] .js-tag[data-stack="${stack}"] { background: var(--color-accent-100); color: var(--color-accent-800) }`,
+  ]),
+].join('\n');
+
+const title = 'apps.thiagotn — coisas que eu construí';
+const description =
+  'Os side projects do Thiago Nogueira, num só lugar: rachão, churrasco, gestão clínica, blog e mais — cada app com código aberto no GitHub e rodando num homelab com k3s.';
+---
+
+<Base title={title} description={description}>
+  <div style="position:relative;min-height:100vh">
+    <!-- Decoração: um círculo de sage atrás de tudo. O body tem overflow-x: clip
+         justamente por causa dele, que sangra para fora pela direita. -->
+    <div
+      style="position:absolute;right:-160px;top:-200px;width:440px;height:440px;border-radius:50%;background:var(--color-accent-2-200);z-index:0;pointer-events:none"
+      aria-hidden="true"
+    >
+    </div>
+
+    <nav
+      class="nav"
+      style="position:relative;z-index:1;max-width:1200px;margin:0 auto;box-sizing:border-box;padding-inline:clamp(20px,5vw,64px)"
+    >
+      <span class="nav-brand">apps.thiagotn</span>
+      <a href="https://thiagotn.com">Blog</a>
+      <a class="btn btn-secondary" href="https://github.com/thiagotn" style="font-size:14px">
+        <Icon name="github" size={16} />
+        github.com/thiagotn
+      </a>
+    </nav>
+
+    <main
+      style="position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,64px) 56px;box-sizing:border-box"
+    >
+      <section style="padding:72px 0 48px;display:flex;flex-direction:column;gap:24px;max-width:760px">
+        <!-- margin-left negativo: compensação ótica da Caprasimo, que abre demais à
+             esquerda e deixaria o título desalinhado do resto da coluna. -->
+        <h1 style="margin:0;font-size:clamp(40px,6vw,76px);line-height:1.06;margin-left:-0.028em">
+          <span style="display:block">Coisas que eu construí.</span>
+          <span style="display:block;color:var(--color-accent)">Nas horas vagas.</span>
+        </h1>
+        <p
+          style="margin:0;font-size:18px;line-height:1.6;max-width:56ch;color:color-mix(in srgb,var(--color-text) 80%,transparent)"
+        >
+          Os side projects do Thiago Nogueira, num só lugar. Do rachão de quinta ao churrasco de
+          sábado — cada app com código aberto no GitHub e rodando no meu homelab.
+        </p>
+      </section>
+
+      <StackFilter chips={chipList} />
+
+      <FeaturedApp app={FEATURED} />
+
+      <section
+        aria-label="Apps"
+        style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:24px"
+      >
+        {cardList.map((app) => <AppCard app={app} />)}
+      </section>
+
+      <p class="js-empty" style="margin:0;padding:24px 0;font-size:16px">
+        Nenhum app com essa stack (ainda).
+      </p>
+
+      <section
+        style="margin-top:72px;background:var(--color-accent-2-100);border-radius:calc(2 * var(--radius-lg));padding:clamp(28px,4vw,48px) clamp(24px,4vw,56px);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between"
+      >
+        <div style="display:flex;flex-direction:column;gap:10px;max-width:56ch">
+          <h2 style="margin:0;font-size:28px;line-height:1.15">Tudo aberto, tudo no homelab.</h2>
+          <p
+            style="margin:0;font-size:16px;line-height:1.6;color:color-mix(in srgb,var(--color-text) 80%,transparent)"
+          >
+            Cada app roda em k3s em casa, com deploy por GitOps via Argo CD. Os bastidores eu conto
+            no blog.
+          </p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn btn-primary" href="https://thiagotn.com" style="font-size:15px;padding:10px 20px"
+            >Ler o blog</a
+          >
+          <a
+            class="btn btn-secondary"
+            href="https://github.com/thiagotn"
+            style="font-size:15px;padding:10px 20px">Ver o GitHub</a
+          >
+        </div>
+      </section>
+
+      <footer
+        style="padding-top:40px;font-size:13px;color:color-mix(in srgb,var(--color-text) 70%,transparent)"
+      >
+        © 2026 Thiago Nogueira · apps.thiagotn.com
+      </footer>
+    </main>
+  </div>
+</Base>
+
+<style is:inline set:html={filterCss}></style>
+
+<script>
+  // O filtro inteiro: trocar um atributo no <html>. O resto é CSS.
+  const ALL = 'Todos';
+  const root = document.documentElement;
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.js-chip'));
+  const apps = Array.from(document.querySelectorAll<HTMLElement>('.js-app'));
+  const known = new Set(chips.map((chip) => chip.dataset.stack));
+
+  function matches(stack: string) {
+    return apps.filter((app) =>
+      // Sob "Todos" o destaque não conta: ele está no bloco de cima, não no grid.
+      stack === ALL ? !app.dataset.featured : app.dataset.stacks?.includes(`|${stack}|`),
+    );
+  }
+
+  function apply(requested: string | null, { updateUrl = true } = {}) {
+    const stack = requested && known.has(requested) ? requested : ALL;
+    root.dataset.filter = stack;
+    root.toggleAttribute('data-empty', matches(stack).length === 0);
+    for (const chip of chips) {
+      chip.setAttribute('aria-pressed', String(chip.dataset.stack === stack));
+    }
+    if (!updateUrl) return;
+    const url = new URL(location.href);
+    if (stack === ALL) url.searchParams.delete('stack');
+    else url.searchParams.set('stack', stack);
+    history.replaceState(null, '', url);
+  }
+
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      const picked = chip.dataset.stack ?? ALL;
+      // Clicar no chip já ativo volta para "Todos" — inclusive no próprio "Todos".
+      apply(picked === root.dataset.filter ? ALL : picked);
+    });
+  }
+
+  // Estado inicial vindo da URL (?stack=Go), para o link ser compartilhável.
+  apply(new URLSearchParams(location.search).get('stack'), { updateUrl: false });
+</script>

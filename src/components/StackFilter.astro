@@ -1,0 +1,34 @@
+---
+import { ALL, type Chip } from '../lib/apps';
+
+interface Props {
+  chips: Chip[];
+}
+const { chips } = Astro.props;
+---
+
+<section aria-label="Filtrar por stack" style="display:flex;flex-direction:column;gap:12px;padding:0 0 32px">
+  <span
+    style="font-size:13px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:var(--color-accent-700)"
+    >Filtrar por stack</span
+  >
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    {
+      chips.map((chip) => (
+        // Todos os chips nascem com .tag-outline; o CSS do filtro pinta de accent
+        // aquele cujo data-stack casa com o data-filter do <html>. Assim o estado
+        // inicial já está certo no HTML, sem esperar o JS.
+        <button
+          type="button"
+          class="tag tag-outline js-chip"
+          data-stack={chip.name}
+          aria-pressed={chip.name === ALL ? 'true' : 'false'}
+          style="display:inline-flex;align-items:center;gap:6px;font-size:14px;padding:7px 14px;cursor:pointer;font-family:inherit"
+        >
+          {chip.name}
+          <span style="font-size:12px;opacity:0.7">{chip.count}</span>
+        </button>
+      ))
+    }
+  </div>
+</section>

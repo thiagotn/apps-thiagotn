@@ -1,0 +1,11 @@
+.git
+.github
+.gitignore
+.claude
+README.md
+node_modules
+dist
+.astro
+# O gerador de thumbnails não participa do build da imagem; as .webp que ele produz
+# vivem em public/ e ESSAS precisam entrar.
+scripts
