@@ -1,6 +1,10 @@
 // Tudo o que a página mostra é derivado de src/data/apps.json em tempo de build.
 // Nada de contagem escrita à mão: acrescentar um app ao JSON basta para o filtro,
 // os números dos chips e os tints dos cards acompanharem.
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import data from '../data/apps.json';
 
 export type App = {
@@ -83,4 +87,22 @@ export function cards(): Array<App & { tint: string }> {
  */
 export function stacksAttr(stacks: string[]): string {
   return `|${stacks.join('|')}|`;
+}
+
+/**
+ * A URL de uma thumbnail, com um sufixo derivado do conteúdo do arquivo.
+ *
+ * O nome do arquivo é estável (`prumo-16x10.webp`) e o nginx manda cachear por 30 dias, o
+ * que é certo para quem visita e errado quando a imagem é refeita: a borda da Cloudflare
+ * continuaria servindo a antiga por um mês. O hash no final muda a URL quando — e só
+ * quando — os bytes mudam, então a recaptura aparece no mesmo deploy.
+ */
+export function thumbUrl(slug: string, shape: '16x10' | '4x3'): string {
+  const path = `/thumbs/${slug}-${shape}.webp`;
+  // A partir da raiz do projeto, e não de import.meta.url: no build o módulo vira um chunk
+  // em outro diretório, e o caminho relativo deixaria de apontar para public/.
+  const file = join(process.cwd(), 'public', path);
+  if (!existsSync(file)) return path; // sem arquivo, o card cai no fundo colorido
+  const hash = createHash('sha256').update(readFileSync(file)).digest('hex').slice(0, 8);
+  return `${path}?v=${hash}`;
 }

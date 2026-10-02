@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { stacksAttr, type App } from '../lib/apps';
+import { stacksAttr, thumbUrl, type App } from '../lib/apps';
 
 interface Props {
   app: App & { tint: string };
@@ -24,7 +24,7 @@ const { app } = Astro.props;
          colorido que aparece enquanto (ou se) a imagem não carregar. -->
     <div class="washed" style="position:absolute;inset:0">
       <img
-        src={`/thumbs/${app.slug}-16x10.webp`}
+        src={thumbUrl(app.slug, '16x10')}
         alt={`Captura de tela de ${app.name}`}
         width="1120"
         height="700"

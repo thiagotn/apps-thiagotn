@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import type { App } from '../lib/apps';
+import { thumbUrl, type App } from '../lib/apps';
 
 interface Props {
   app: App;
@@ -67,7 +67,7 @@ const { app } = Astro.props;
     <div class="washed" style="position:absolute;inset:0">
       <!-- A única imagem acima da dobra: sem lazy, e com fetchpriority alta. -->
       <img
-        src={`/thumbs/${app.slug}-4x3.webp`}
+        src={thumbUrl(app.slug, '4x3')}
         alt={`Captura de tela de ${app.name}`}
         width="1200"
         height="900"
