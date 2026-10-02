@@ -52,9 +52,24 @@ const ogImage = new URL('/og.png', Astro.site).href;
      - text-wrap: pretty       → quebra de linha dos parágrafos e títulos;
      - cor de link accent-700  → mais escura que o --color-accent do design system, para
                                  o link "Blog" ter contraste sobre o fundo bege. */
+  /* O clip vai nos DOIS: com o <html> em `visible`, o overflow do body propaga para a
+     viewport e o body deixa de clipar coisa nenhuma — o círculo decorativo voltava a
+     empurrar 160px de rolagem horizontal no telefone. */
+  html,
   body {
     overflow-x: clip;
+  }
+  body {
     text-wrap: pretty;
+  }
+
+  /* No telefone a barra do topo não cabe numa linha só: "github.com/thiagotn" sozinho
+     passa da largura da tela. Deixar quebrar é melhor que rolagem lateral. */
+  @media (max-width: 480px) {
+    .nav {
+      flex-wrap: wrap;
+      row-gap: 10px;
+    }
   }
   a {
     color: var(--color-accent-700);

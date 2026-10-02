@@ -14,16 +14,19 @@ const stacks = [...stackCounts().keys()];
 // casa, pintam o chip ativo e promovem a tag correspondente dentro do card. O script
 // abaixo só troca `data-filter` no <html> — o estado inicial já sai pronto do servidor,
 // sem piscar.
+// `display: none !important` não é preguiça: o bloco de destaque e os cards carregam
+// `style="display:…"` inline (é assim que o design foi entregue, e é o que o editor de
+// design edita), e estilo inline ganha de qualquer regra de folha sem !important.
 const filterCss = [
   // Sob "Todos", o card do destaque sai do grid (ele aparece no bloco de cima).
-  `html[data-filter="${ALL}"] .js-app[data-featured] { display: none }`,
+  `html[data-filter="${ALL}"] .js-app[data-featured] { display: none !important }`,
   // Com qualquer filtro aplicado, o bloco de destaque some e o app volta a ser um card.
-  `html:not([data-filter="${ALL}"]) .js-featured { display: none }`,
+  `html:not([data-filter="${ALL}"]) .js-featured { display: none !important }`,
   `html[data-filter="${ALL}"] .js-chip[data-stack="${ALL}"] { background: var(--color-accent-100); color: var(--color-accent-800); border-color: transparent }`,
   '.js-empty { display: none }',
   'html[data-empty] .js-empty { display: block }',
   ...stacks.flatMap((stack) => [
-    `html[data-filter="${stack}"] .js-app:not([data-stacks*="|${stack}|"]) { display: none }`,
+    `html[data-filter="${stack}"] .js-app:not([data-stacks*="|${stack}|"]) { display: none !important }`,
     `html[data-filter="${stack}"] .js-chip[data-stack="${stack}"] { background: var(--color-accent-100); color: var(--color-accent-800); border-color: transparent }`,
     `html[data-filter="${stack}"] .js-tag[data-stack="${stack}"] { background: var(--color-accent-100); color: var(--color-accent-800) }`,
   ]),
