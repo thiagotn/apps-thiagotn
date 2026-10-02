@@ -54,6 +54,41 @@ async function capture(page, app) {
   // rachao.app é SPA: o HTML inicial vem vazio e só a hidratação desenha a tela. Sem
   // esperar as fontes e dar um respiro, a captura sai em branco.
   await page.evaluate(() => document.fonts?.ready).catch(() => {});
+
+  // Vídeo de fundo (o hero do prumo.in) precisa de um quadro decodificado, senão a captura
+  // pega o retângulo vazio. Em vez de torcer pelo autoplay, posicionamos o vídeo num ponto
+  // fixo da duração — assim a thumbnail é a mesma a cada execução.
+  await page
+    .evaluate(async () => {
+      const wait = (el, ev, ms) =>
+        new Promise((done) => {
+          const t = setTimeout(done, ms);
+          el.addEventListener(ev, () => { clearTimeout(t); done(); }, { once: true });
+        });
+      await Promise.all(
+        [...document.querySelectorAll('video')].map(async (video) => {
+          video.muted = true;
+          if (video.readyState < 2) await wait(video, 'loadeddata', 5_000);
+          if (Number.isFinite(video.duration) && video.duration > 0) {
+            const seeked = wait(video, 'seeked', 3_000);
+            video.currentTime = Math.min(video.duration * 0.55, video.duration - 0.1);
+            await seeked;
+          }
+          video.pause();
+        }),
+      );
+    })
+    .catch(() => {});
+
+  // Congela transições e animações sem esconder mídia, para não capturar o meio de uma
+  // animação de entrada.
+  await page
+    .addStyleTag({
+      content:
+        '*,*::before,*::after{animation-duration:.001s!important;animation-delay:0s!important;transition-duration:.001s!important}',
+    })
+    .catch(() => {});
+
   await page.waitForTimeout(2_000);
 
   await page.screenshot({ path: shot });
@@ -83,13 +118,23 @@ async function main() {
   await mkdir(CACHE, { recursive: true });
   await mkdir(OUT, { recursive: true });
 
-  const browser = await chromium.launch();
+  // O Chromium que vem com o Playwright não traz codecs proprietários: um hero em H.264
+  // simplesmente não decodifica, e a captura sai com o buraco no lugar do vídeo. O Chrome
+  // instalado na máquina traz. Sem ele, seguimos com o empacotado e avisamos.
+  let browser;
+  try {
+    browser = await chromium.launch({ channel: 'chrome' });
+  } catch {
+    console.warn('! Chrome não encontrado; usando o Chromium do Playwright (sem H.264: vídeo não aparece).');
+    browser = await chromium.launch();
+  }
   const context = await browser.newContext({
     viewport: VIEWPORT,
     deviceScaleFactor: SCALE,
     locale: 'pt-BR',
-    // Sem isto a captura pode pegar o meio de uma animação de entrada.
-    reducedMotion: 'reduce',
+    // Sem forçar redução de movimento: site bem-feito troca o vídeo do hero pelo quadro
+    // parado nesse modo, e o que se quer na vitrine é o hero como o visitante o vê.
+    // Animações são congeladas por CSS logo abaixo, sem interferir no que o site mostra.
   });
   const page = await context.newPage();
 
