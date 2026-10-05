@@ -39,6 +39,15 @@
       "stacks": ["Hugo", "Nginx", "Docker", "k3s", "Argo CD"]
     },
     {
+      "slug": "apps",
+      "name": "apps.thiagotn.com",
+      "kind": "Vitrine",
+      "url": "https://apps.thiagotn.com",
+      "repo": "https://github.com/thiagotn/apps-thiagotn",
+      "summary": "Esta página. Nasceu de um handoff de design recriado em Astro, com filtro por stack e as thumbnails capturadas dos próprios apps por um script.",
+      "stacks": ["Astro", "TypeScript", "Playwright", "Nginx", "Docker", "k3s"]
+    },
+    {
       "slug": "dratatimayumi",
       "name": "dratatimayumi.com.br",
       "kind": "Site institucional",
