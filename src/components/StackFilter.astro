@@ -1,16 +1,19 @@
 ---
 import { ALL, type Chip } from '../lib/apps';
+import { UI, type Locale } from '../i18n/ui';
 
 interface Props {
   chips: Chip[];
+  locale: Locale;
 }
-const { chips } = Astro.props;
+const { chips, locale } = Astro.props;
+const t = UI[locale];
 ---
 
-<section aria-label="Filtrar por stack" style="display:flex;flex-direction:column;gap:12px;padding:0 0 32px">
+<section aria-label={t.filterRegion} style="display:flex;flex-direction:column;gap:12px;padding:0 0 32px">
   <span
     style="font-size:13px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;color:var(--color-accent-700)"
-    >Filtrar por stack</span
+    >{t.filterLabel}</span
   >
   <div style="display:flex;flex-wrap:wrap;gap:8px">
     {
@@ -25,7 +28,7 @@ const { chips } = Astro.props;
           aria-pressed={chip.name === ALL ? 'true' : 'false'}
           style="display:inline-flex;align-items:center;gap:6px;font-size:14px;padding:7px 14px;cursor:pointer;font-family:inherit"
         >
-          {chip.name}
+          {chip.isAll ? t.filterAll : chip.name}
           <span style="font-size:12px;opacity:0.7">{chip.count}</span>
         </button>
       ))

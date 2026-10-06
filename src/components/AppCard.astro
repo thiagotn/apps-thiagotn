@@ -1,11 +1,14 @@
 ---
 import Icon from './Icon.astro';
 import { stacksAttr, thumbUrl, type App } from '../lib/apps';
+import { UI, type Locale } from '../i18n/ui';
 
 interface Props {
   app: App & { tint: string };
+  locale: Locale;
 }
-const { app } = Astro.props;
+const { app, locale } = Astro.props;
+const t = UI[locale];
 ---
 
 <!-- data-stacks e data-featured são lidos pelo CSS do filtro (gerado em index.astro).
@@ -25,7 +28,7 @@ const { app } = Astro.props;
     <div class="washed" style="position:absolute;inset:0">
       <img
         src={thumbUrl(app.slug, '16x10')}
-        alt={`Captura de tela de ${app.name}`}
+        alt={t.screenshotOf(app.name)}
         width="1120"
         height="700"
         loading="lazy"
@@ -38,7 +41,7 @@ const { app } = Astro.props;
   <div style="display:flex;flex-direction:column;gap:12px;padding:18px 8px 6px;flex:1">
     <span
       style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-accent-700)"
-      >{app.kind}</span
+      >{app.kind[locale]}</span
     >
     <h3 style="margin:0;font-size:24px;line-height:1.15">{app.name}</h3>
     <!-- flex:1 no parágrafo (e no wrapper) é o que alinha a linha de botões entre cards
@@ -46,7 +49,7 @@ const { app } = Astro.props;
     <p
       style="margin:0;font-size:15px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 78%,transparent);flex:1"
     >
-      {app.summary}
+      {app.summary[locale]}
     </p>
 
     <div style="display:flex;flex-wrap:wrap;gap:6px">
@@ -67,7 +70,7 @@ const { app } = Astro.props;
         rel="noopener"
         style="flex:1;font-size:14px;padding:9px 16px"
       >
-        Abrir app
+        {t.open}
         <Icon name="arrow-up-right" size={15} />
       </a>
       <a
@@ -75,8 +78,8 @@ const { app } = Astro.props;
         href={app.repo}
         target="_blank"
         rel="noopener"
-        aria-label={`Código de ${app.name} no GitHub`}
-        title="Ver no GitHub"
+        aria-label={t.codeOf(app.name)}
+        title={t.viewOnGitHub}
         style="width:40px;height:40px"
       >
         <Icon name="github" size={17} />

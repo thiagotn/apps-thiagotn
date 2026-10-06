@@ -1,59 +1,77 @@
 {
-  "$comment": "Fonte de verdade da vitrine. Acrescentar um app aqui é tudo o que a página precisa: os chips de filtro, as contagens e os tints dos cards são derivados daqui em tempo de build. Os textos vêm do handoff de design e são finais.",
+  "$comment": "Fonte de verdade da vitrine. Acrescentar um app aqui é tudo o que a página precisa: os chips de filtro, as contagens e os tints dos cards são derivados daqui em tempo de build. `kind` e `summary` são por idioma; os nomes de stack não se traduzem.",
   "apps": [
     {
       "slug": "rachao",
       "name": "rachao.app",
-      "kind": "PWA · Android",
+      "kind": { "pt-BR": "PWA · Android", "en-US": "PWA · Android" },
       "url": "https://rachao.app",
       "repo": "https://github.com/thiagotn/football-manager",
-      "summary": "Organiza o futebol da galera: grupos, partidas, confirmação de presença por link, sorteio de times e um servidor MCP para conversar com o app via IA.",
+      "summary": {
+        "pt-BR": "Organiza o futebol da galera: grupos, partidas, confirmação de presença por link, sorteio de times e um servidor MCP para conversar com o app via IA.",
+        "en-US": "Runs the weekly football game: groups, matches, RSVP by link, team drawing, and an MCP server so you can talk to the app through AI."
+      },
       "stacks": ["SvelteKit", "Tailwind", "FastAPI", "Go", "PostgreSQL", "Playwright", "MCP"],
       "featured": true
     },
     {
       "slug": "churrasquin",
       "name": "churrasqu.in",
-      "kind": "Web app",
+      "kind": { "pt-BR": "Web app", "en-US": "Web app" },
       "url": "https://churrasqu.in",
       "repo": "https://github.com/thiagotn/churrasqu.in",
-      "summary": "Calculadora de churrasco: quem vai, quanto custa e a lista de compras por nível. Convite com QR Code, rateio por Pix e RSVP sem cadastro.",
+      "summary": {
+        "pt-BR": "Calculadora de churrasco: quem vai, quanto custa e a lista de compras por nível. Convite com QR Code, rateio por Pix e RSVP sem cadastro.",
+        "en-US": "Barbecue calculator: who is coming, what it costs, and the shopping list by appetite. QR Code invites, cost splitting by Pix, and RSVP without signing up."
+      },
       "stacks": ["Next.js", "NestJS", "Prisma", "PostgreSQL", "Tailwind", "TypeScript"]
     },
     {
       "slug": "prumo",
       "name": "prumo.in",
-      "kind": "SaaS",
+      "kind": { "pt-BR": "SaaS", "en-US": "SaaS" },
       "url": "https://prumo.in",
       "repo": "https://github.com/thiagotn/prumo",
-      "summary": "Gestão clínica white-label e multi-tenant: agenda, prontuário, estoque por lote, termos com assinatura em PDF e financeiro.",
+      "summary": {
+        "pt-BR": "Gestão clínica white-label e multi-tenant: agenda, prontuário, estoque por lote, termos com assinatura em PDF e financeiro.",
+        "en-US": "White-label, multi-tenant clinic management: scheduling, medical records, stock by batch, signed consent PDFs, and billing."
+      },
       "stacks": ["Next.js", "React", "Prisma", "PostgreSQL", "Vitest", "Playwright"]
     },
     {
       "slug": "blog",
       "name": "thiagotn.com",
-      "kind": "Blog",
+      "kind": { "pt-BR": "Blog", "en-US": "Blog" },
       "url": "https://thiagotn.com",
       "repo": "https://github.com/thiagotn/thiagotn-blog",
-      "summary": "Meu blog pessoal, bilíngue, sobre software, infraestrutura, homelab e o que mais der vontade.",
+      "summary": {
+        "pt-BR": "Meu blog pessoal, bilíngue, sobre software, infraestrutura, homelab e o que mais der vontade.",
+        "en-US": "My personal blog, in two languages, about software, infrastructure, the homelab, and whatever else comes up."
+      },
       "stacks": ["Hugo", "Nginx", "Docker", "k3s", "Argo CD"]
     },
     {
       "slug": "apps",
       "name": "apps.thiagotn.com",
-      "kind": "Vitrine",
+      "kind": { "pt-BR": "Vitrine", "en-US": "Showcase" },
       "url": "https://apps.thiagotn.com",
       "repo": "https://github.com/thiagotn/apps-thiagotn",
-      "summary": "Esta página. Nasceu de um handoff de design recriado em Astro, com filtro por stack e as thumbnails capturadas dos próprios apps por um script.",
+      "summary": {
+        "pt-BR": "Esta página. Nasceu de um handoff de design recriado em Astro, com filtro por stack e as thumbnails capturadas dos próprios apps por um script.",
+        "en-US": "This page. It started as a design handoff rebuilt in Astro, with filtering by stack and thumbnails captured from the apps themselves by a script."
+      },
       "stacks": ["Astro", "TypeScript", "Playwright", "Nginx", "Docker", "k3s"]
     },
     {
       "slug": "dratatimayumi",
       "name": "dratatimayumi.com.br",
-      "kind": "Site institucional",
+      "kind": { "pt-BR": "Site institucional", "en-US": "Marketing site" },
       "url": "https://dratatimayumi.com.br",
       "repo": "https://github.com/thiagotn/dratatimayumi-web",
-      "summary": "Site de estética avançada com serviços, portfólio, FAQ e contato direto pelo WhatsApp.",
+      "summary": {
+        "pt-BR": "Site de estética avançada com serviços, portfólio, FAQ e contato direto pelo WhatsApp.",
+        "en-US": "Site for an aesthetics clinic, with services, portfolio, FAQ, and direct contact over WhatsApp."
+      },
       "stacks": ["HTML", "Tailwind", "JavaScript", "Nginx", "k3s"]
     }
   ]

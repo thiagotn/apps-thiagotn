@@ -6,22 +6,32 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import data from '../data/apps.json';
+import type { Locale } from '../i18n/ui';
+
+/** Texto que existe nos dois idiomas. */
+export type Localized = Record<Locale, string>;
 
 export type App = {
   slug: string;
   name: string;
-  kind: string;
+  kind: Localized;
   url: string;
   repo: string;
-  summary: string;
+  summary: Localized;
   stacks: string[];
   featured?: boolean;
 };
 
-export const APPS: App[] = data.apps;
+export const APPS: App[] = data.apps as App[];
 
-/** O rótulo do chip que significa "sem filtro". Vale como valor de `data-filter`. */
-export const ALL = 'Todos';
+/**
+ * O valor de `data-filter` que significa "sem filtro".
+ *
+ * Um símbolo, e não a palavra "Todos": o rótulo do chip é traduzido, e amarrar o estado
+ * ao texto visível quebraria o filtro em inglês. Os nomes de stack, esses, não se
+ * traduzem — "PostgreSQL" é "PostgreSQL" em qualquer idioma.
+ */
+export const ALL = '__all__';
 
 /**
  * Os tints de fundo dos cards, na ordem em que se repetem.

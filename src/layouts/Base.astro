@@ -1,33 +1,50 @@
 ---
+import { LOCALES, PATHS, UI, DEFAULT_LOCALE, type Locale } from '../i18n/ui';
+
 interface Props {
-  title: string;
-  description: string;
+  locale: Locale;
+  /** Caminho desta página no idioma atual. Default: a home do idioma. */
+  path?: string;
+  title?: string;
+  description?: string;
 }
-const { title, description } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og.png', Astro.site).href;
+const { locale, path, title, description } = Astro.props;
+const t = UI[locale];
+const here = path ?? PATHS[locale];
+const abs = (p: string) => new URL(p, Astro.site).href;
+const ogImage = abs('/og.png');
 ---
 
 <!doctype html>
-<html lang="pt-BR" data-filter="Todos">
+<html lang={locale} data-filter="__all__">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    <title>{title ?? t.title}</title>
+    <meta name="description" content={description ?? t.description} />
+    <link rel="canonical" href={abs(here)} />
+
+    <!-- Mesmo esquema do thiagotn.com: um alternate por idioma e o x-default no padrão,
+         que é quem o buscador serve para quem não casa com nenhum dos dois. -->
+    {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={abs(PATHS[l])} />)}
+    <link rel="alternate" hreflang="x-default" href={abs(PATHS[DEFAULT_LOCALE])} />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="apps.thiagotn" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title ?? t.title} />
+    <meta property="og:description" content={description ?? t.description} />
+    <meta property="og:url" content={abs(here)} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={locale.replace('-', '_')} />
+    {
+      LOCALES.filter((l) => l !== locale).map((l) => (
+        <meta property="og:locale:alternate" content={l.replace('-', '_')} />
+      ))
+    }
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#f5ead8" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title="Blog" href="https://thiagotn.com/index.xml" />
 
     <!-- Fontes do design system: Caprasimo nos títulos, Figtree no texto.
          Por <link> e não pelo @import do CSS, que serializaria o download. -->
@@ -62,6 +79,12 @@ const ogImage = new URL('/og.png', Astro.site).href;
   body {
     text-wrap: pretty;
   }
+  a {
+    color: var(--color-accent-700);
+  }
+  a:hover {
+    color: var(--color-accent-800);
+  }
 
   /* No telefone a barra do topo não cabe numa linha só: "github.com/thiagotn" sozinho
      passa da largura da tela. Deixar quebrar é melhor que rolagem lateral. */
@@ -70,11 +93,5 @@ const ogImage = new URL('/og.png', Astro.site).href;
       flex-wrap: wrap;
       row-gap: 10px;
     }
-  }
-  a {
-    color: var(--color-accent-700);
-  }
-  a:hover {
-    color: var(--color-accent-800);
   }
 </style>

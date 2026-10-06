@@ -8,9 +8,9 @@ export default defineConfig({
   site: 'https://apps.thiagotn.com',
   output: 'static',
   build: {
-    // Um arquivo por rota, em vez de /pagina/index.html: combina com o `try_files` do nginx
-    // e evita redirect de trailing-slash atrás do Traefik.
-    format: 'file',
+    // Diretório por rota (/en/index.html): é o que faz /en/ funcionar com o `try_files` do
+    // nginx, e é o mesmo formato de URL que o thiagotn.com usa para o idioma.
+    format: 'directory',
   },
   devToolbar: { enabled: false },
 });

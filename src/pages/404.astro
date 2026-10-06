@@ -1,18 +1,30 @@
 ---
+// Um 404 para os dois idiomas: o nginx serve este arquivo para qualquer caminho que não
+// exista, inclusive sob /en/, e nesse ponto não há como saber o idioma pretendido.
 import Base from '../layouts/Base.astro';
+import { UI } from '../i18n/ui';
+
+const pt = UI['pt-BR'];
+const en = UI['en-US'];
 ---
 
-<Base title="Página não encontrada — apps.thiagotn" description="Essa página não existe.">
+<Base locale="pt-BR" path="/404" title={`${pt.notFoundLine1} ${pt.notFoundLine2}`} description={pt.notFoundBody}>
   <main
     style="max-width:1200px;margin:0 auto;padding:96px clamp(20px,5vw,64px);display:flex;flex-direction:column;gap:20px;align-items:flex-start"
   >
     <h1 style="margin:0;font-size:clamp(40px,6vw,76px);line-height:1.06;margin-left:-0.028em">
-      <span style="display:block">Essa página</span>
-      <span style="display:block;color:var(--color-accent)">não existe.</span>
+      <span style="display:block">{pt.notFoundLine1}</span>
+      <span style="display:block;color:var(--color-accent)">{pt.notFoundLine2}</span>
     </h1>
     <p style="margin:0;font-size:18px;line-height:1.6;max-width:48ch;color:color-mix(in srgb,var(--color-text) 80%,transparent)">
-      Talvez o link esteja velho. A lista completa de apps está na página inicial.
+      {pt.notFoundBody}
     </p>
-    <a class="btn btn-primary" href="/" style="font-size:15px;padding:10px 20px">Ver os apps</a>
+    <p lang="en-US" style="margin:0;font-size:16px;line-height:1.6;max-width:48ch;color:color-mix(in srgb,var(--color-text) 60%,transparent)">
+      {en.notFoundBody}
+    </p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn btn-primary" href="/" style="font-size:15px;padding:10px 20px">{pt.notFoundCta}</a>
+      <a class="btn btn-secondary" href="/en/" hreflang="en-US" lang="en-US" style="font-size:15px;padding:10px 20px">{en.notFoundCta}</a>
+    </div>
   </main>
 </Base>
