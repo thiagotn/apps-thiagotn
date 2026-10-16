@@ -38,6 +38,31 @@ const FORMATS = [
   { suffix: '4x3', filter: 'crop=ih*4/3:ih:(iw-ih*4/3)/2:0,scale=1200:900:flags=lanczos' },
 ];
 
+/**
+ * O que fazer na página antes de capturar, por slug.
+ *
+ * A regra geral — abrir a URL e esperar assentar — vale para quase todos. O ondas é a
+ * exceção: abre numa tela de abertura e, sem sessão salva, manda o visitante para
+ * `/login`. Uma visita fria captura o portão, não o player; aqui se faz o que o
+ * visitante faria.
+ */
+const PREPARE = {
+  async ondas(page) {
+    // A abertura some sozinha em 2,2–4,5 s; clicar nela pula a espera. Se já passou,
+    // não há o que clicar e seguimos.
+    const splash = page.locator('[aria-label="pular abertura"]');
+    await splash.click({ timeout: 2_000 }).catch(() => {});
+    await splash.waitFor({ state: 'detached', timeout: 10_000 }).catch(() => {});
+
+    await page.getByRole('button', { name: /visitante/i }).click({ timeout: 10_000 });
+
+    // A barra de abas só existe dentro do app, e o botão de curtir só existe com faixa
+    // na tela: juntos, dizem que o portão passou e o catálogo chegou.
+    await page.waitForSelector('[aria-label^="ondas —"]', { timeout: 15_000 });
+    await page.getByRole('button', { name: 'Curtir' }).first().waitFor({ timeout: 20_000 });
+  },
+};
+
 async function capture(page, app) {
   const shot = join(CACHE, `${app.slug}.png`);
   process.stdout.write(`  ${app.name} … `);
@@ -54,6 +79,13 @@ async function capture(page, app) {
   // rachao.app é SPA: o HTML inicial vem vazio e só a hidratação desenha a tela. Sem
   // esperar as fontes e dar um respiro, a captura sai em branco.
   await page.evaluate(() => document.fonts?.ready).catch(() => {});
+
+  // Telas atrás de abertura ou login precisam de um passo antes da captura.
+  const prepare = PREPARE[app.slug];
+  if (prepare) {
+    process.stdout.write('(preparando) ');
+    await prepare(page);
+  }
 
   // Vídeo de fundo (o hero do prumo.in) precisa de um quadro decodificado, senão a captura
   // pega o retângulo vazio. Em vez de torcer pelo autoplay, posicionamos o vídeo num ponto

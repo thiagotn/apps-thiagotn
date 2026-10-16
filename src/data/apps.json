@@ -15,6 +15,18 @@
       "featured": true
     },
     {
+      "slug": "ondas",
+      "name": "music.thiagotn.com",
+      "kind": { "pt-BR": "Player de música", "en-US": "Music player" },
+      "url": "https://music.thiagotn.com",
+      "repo": "https://github.com/thiagotn/ondas",
+      "summary": {
+        "pt-BR": "Ondas — streaming de música independente com estética de terminal: fila, nove temas, faixas offline e catálogo do Audius com fallback local. Instala como PWA.",
+        "en-US": "Ondas — independent music streaming with a terminal look: queue, nine themes, offline tracks, and an Audius catalog with a local fallback. Installs as a PWA."
+      },
+      "stacks": ["React", "TypeScript", "Vite", "Zustand", "Vitest", "Playwright"]
+    },
+    {
       "slug": "churrasquin",
       "name": "churrasqu.in",
       "kind": { "pt-BR": "Web app", "en-US": "Web app" },

@@ -21,13 +21,19 @@ derivados dali em tempo de build — não há lista repetida em lugar nenhum.
 {
   "slug": "meuapp",
   "name": "meuapp.com",
-  "kind": "Web app",
+  "kind": { "pt-BR": "Web app", "en-US": "Web app" },
   "url": "https://meuapp.com",
   "repo": "https://github.com/thiagotn/meuapp",
-  "summary": "Uma frase sobre o que ele faz.",
+  "summary": {
+    "pt-BR": "Uma frase sobre o que ele faz.",
+    "en-US": "One line on what it does."
+  },
   "stacks": ["Go", "PostgreSQL"]
 }
 ```
+
+`kind` e `summary` são por idioma — as duas chaves são obrigatórias, e o `astro check`
+reclama se faltar uma. Nomes de stack não se traduzem.
 
 `"featured": true` marca o app do bloco de destaque — um só. Depois, `npm run thumbs meuapp`.
 
@@ -46,6 +52,10 @@ diferentes — o oposto do que GitOps assume.
 
 **Olhe as imagens antes de commitar.** Elas são capturas de apps reais: vale conferir que não
 entrou banner de cookie, tela de carregamento ou dado de alguém.
+
+App atrás de tela de abertura ou de login precisa de um passo antes da captura: o mapa
+`PREPARE` no início do `thumbs.mjs` guarda, por slug, o que o visitante faria para chegar
+à tela que importa (no `ondas`, pular a abertura e entrar como visitante).
 
 Enquanto um arquivo não existir, o card continua certo: aparece o retângulo colorido que o
 design já especifica como fallback.
